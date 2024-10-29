@@ -1,5 +1,38 @@
+import '@std/dotenv/load';
+import OpenAI from 'openai';
+
 const port = 8000;
 console.log(`Server running on http://localhost:${port}`);
+
+if (!Deno.env.has('OPENAI_API_KEY')) {
+  console.log('OpenAI API key is not set in .env file');
+  Deno.exit(1);
+}
+
+const openai = new OpenAI();
+const DAILY_PROMPT = 'What color is the sun?';
+let savedResponse: string | null = null;
+
+async function main() {
+  const response = await openai.chat.completions.create({
+    model: 'gpt-4o-mini',
+    messages: [
+      {
+        role: 'system',
+        content: 'You are a poet who writes single-sentence poems.',
+      },
+      {
+        role: 'user',
+        content: DAILY_PROMPT,
+      },
+    ],
+  });
+
+  savedResponse = response.choices[0].message.content;
+  console.log(savedResponse);
+}
+
+main();
 
 Deno.serve(
   {
@@ -14,6 +47,6 @@ Deno.serve(
     console.log(`${ip} just made an HTTP ${method} request.`);
 
     // Return a web standard Response object
-    return new Response('Hello world!');
+    return new Response(savedResponse);
   },
 );
