@@ -4,11 +4,6 @@ import OpenAI from 'openai';
 const port = 8000;
 console.log(`Server running on http://localhost:${port}`);
 
-if (!Deno.env.has('OPENAI_API_KEY')) {
-  console.log('OpenAI API key is not set in .env file');
-  Deno.exit(1);
-}
-
 const openai = new OpenAI();
 const DAILY_PROMPT = 'What color is the sun?';
 let savedResponse: string | null = null;
