@@ -4,9 +4,9 @@ import OpenAI from 'openai';
 const port = 8000;
 console.log(`Server running on http://localhost:${port}`);
 
-const openai = new OpenAI({
-  apiKey: Deno.env.get('OPENAI_API_KEY'),
-});
+const apiKey = Deno.env.get('OPENAI_API_KEY') || 'your_openai_api_key';
+
+const openai = new OpenAI({ apiKey });
 const DAILY_PROMPT = 'What color is the sun?';
 let savedResponse: string | null = null;
 
